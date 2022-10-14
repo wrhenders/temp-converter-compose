@@ -4,12 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.Button
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,7 +20,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MainActivityContent()
+            MaterialTheme {
+                Surface {
+                    MainActivityContent()
+                }
+            }
         }
     }
 }
@@ -33,11 +33,15 @@ class MainActivity : ComponentActivity() {
 fun MainActivityContent(){
     val celsius = remember { mutableStateOf(0)}
     val newCelsius = remember { mutableStateOf("")}
-    Column() {
+    Column(modifier = Modifier
+        .padding(16.dp)
+        .fillMaxWidth()) {
         Header(R.drawable.sunrise, "sunrise image")
         EnterTemperature(temperature = newCelsius.value, changed = {newCelsius.value = it})
-        ConvertButton {
-            newCelsius.value.toIntOrNull()?.let {celsius.value = it}
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+            ConvertButton {
+                newCelsius.value.toIntOrNull()?.let {celsius.value = it}
+            }
         }
         TemperatureText(celsius.value)
     }
@@ -81,5 +85,9 @@ fun ConvertButton(clicked: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun PreviewMainActivity() {
-    MainActivityContent()
+    MaterialTheme {
+        Surface {
+            MainActivityContent()
+        }
+    }
 }
